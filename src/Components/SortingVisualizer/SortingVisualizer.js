@@ -4,6 +4,8 @@ import BubbleSort from '../../SortingAlgorithms/BubbleSort';
 import InsertionSort from '../../SortingAlgorithms/InsertionSort';
 import SelectionSort from '../../SortingAlgorithms/SelectionSort';
 import MergeSort from '../../SortingAlgorithms/MergeSort'
+import QuickSort,{quickSortPartition,doQuickSort} from '../../SortingAlgorithms/QuickSort'
+
 import {Button} from 'antd'; 
 
 const ANIMATION_SPEED_MS = 1;
@@ -25,12 +27,37 @@ function SortingVisualizer() {
         resetArray();
     },[]);
     
+
+    const makeAllBarsGreen=()=> {
+      console.log("Sorted");
+      const arrayBars = document.getElementsByClassName("array-bar");
+      var arrayLength = arrayBars.length;
+      for (let j = 0; j < arrayLength; j++) {
+        var jBarStyle = arrayBars[j].style;
+        jBarStyle.backgroundColor = "green";
+      }
+      setdisabled(false);
+    }
+
+
+
     const resetArray = ()=>{
         let array = [];
         for(let i=0;i<250;i++){
-            array.push(randomIntFromInterval(5,600));
+            array.push(randomIntFromInterval(5,500));
         }
         setArray(array);
+        function makeAllBarsGreen() {
+          console.log("Sorted");
+          const arrayBars = document.getElementsByClassName("array-bar");
+          var arrayLength = arrayBars.length;
+          for (let j = 0; j < arrayLength; j++) {
+            var jBarStyle = arrayBars[j].style;
+            jBarStyle.backgroundColor = PRIMARY_COLOR;
+          }
+      setdisabled(false);
+        }
+        makeAllBarsGreen();
     }
 
     const  bubbleSort =()=>{
@@ -55,21 +82,16 @@ function SortingVisualizer() {
               else{
                 barOneStyle.backgroundColor=PRIMARY_COLOR;
                 barTwoStyle.backgroundColor=PRIMARY_COLOR;   
-              }                
-            },i*ANIMATION_SPEED_MS,makeAllBarsGreen);
+              }
+              if(i===animations.length-1){
+                makeAllBarsGreen();
+              }                 
+            },i*ANIMATION_SPEED_MS);
       }
         }
 
 
-    function makeAllBarsGreen() {
-        console.log("Sorted");
-        const arrayBars = document.getElementsByClassName("array-bar");
-        var arrayLength = arrayBars.length;
-        for (let j = 0; j < arrayLength; j++) {
-          var jBarStyle = arrayBars[j].style;
-          jBarStyle.backgroundColor = "green";
-        }
-      }
+    
 
 
     function randomIntFromInterval(min, max) {
@@ -78,7 +100,6 @@ function SortingVisualizer() {
       }
 
       const insertionSort =()=>{
-      setdisabled(true);
        
         const animations = InsertionSort(Array);
         
@@ -101,10 +122,12 @@ function SortingVisualizer() {
                 else{
                   barOneStyle.backgroundColor=PRIMARY_COLOR;
                   barTwoStyle.backgroundColor=PRIMARY_COLOR;   
+                }
+                if(i===animations.length-1){
+                  makeAllBarsGreen();
                 }                
-              },i*1,makeAllBarsGreen);
+              },i*1);
         }
-
       }
 
 
@@ -132,10 +155,12 @@ function SortingVisualizer() {
                 else{
                   barOneStyle.backgroundColor=PRIMARY_COLOR;
                   barTwoStyle.backgroundColor=PRIMARY_COLOR;   
-                }                
+                }
+                if(i===animations.length-1){
+                  makeAllBarsGreen();
+                }                 
               },i*1);
         }
-        
       }
 
 
@@ -163,19 +188,82 @@ function SortingVisualizer() {
           barOneStyle.height = `${newHeight}px`;
         }, i * ANIMATION_SPEED_MS);
       }
+      if(i===animations.length-1){
+        makeAllBarsGreen();
+      } 
     }
+
+    
+
+
       }
+
+
+const quickSort=()=>{
+
+  const array = Array;
+  const animations = QuickSort(Array);
+  console.log(animations);
+  const arrayBars = document.getElementsByClassName("array-bar");
+
+  for (let i = 0; i < animations.length; i++) {
+    setTimeout(() => {
+      var [oldPosition, newPosition] = animations[i];
+
+      var oldBarStyle = arrayBars[oldPosition].style;
+      var newBarStyle = arrayBars[newPosition].style;
+      var index;
+      const dummyAnimations = [];
+      if (array.length > 1) {
+        index = quickSortPartition(
+          array,
+          0,
+          array.length - 1,
+          dummyAnimations
+        ); //index returned from partition
+        if (0 < index - 1) {
+          //more elements on the left side of the pivot
+          doQuickSort(dummyAnimations, array, 0, index - 1);
+        }
+        if (index < array.length) {
+          //more elements on the right side of the pivot
+          doQuickSort(dummyAnimations, array, 0, array.length - 1);
+        }
+      }
+
+      oldBarStyle.height = `${array[oldPosition]}px`;
+      newBarStyle.height = `${array[newPosition]}px`;
+
+      oldBarStyle.backgroundColor = "green";
+      newBarStyle.backgroundColor = "red";
+
+      var currentPosition = oldPosition;
+      for (let j = 0; j < currentPosition; j++) {
+        var jBarStyle = arrayBars[j].style;
+        jBarStyle.backgroundColor = "green";
+      }
+      if (i === animations.length - 1) {
+        makeAllBarsGreen();
+      }
+    }, 0.0001);
+  }
+
+
+
+}
+
 
 
 
     return (
-      <div style={{marginTop:"10px"}}>
-        <label style={{fontSize:"25px",fontStyle:"bold",marginRight:"80px",fontFamily:"Helvetica Neue"}} htmlFor="reset" disabled={disabled}>SortingAlgorithm</label>
+      <div style={{marginTop:"23px"}}>
+        <label style={{fontSize:"25px",fontStyle:"bold",marginRight:"100px",fontFamily:"Helvetica Neue"}} htmlFor="reset" disabled={disabled}>SortingAlgorithm</label>
         <Button name="reset" id="reset" style={{margin:"5px",backgroundColor:`${SECONDARY_COLOR}`,color:"white"}} onClick={()=>resetArray()} disabled={disabled}>Reset </Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>bubbleSort()} disabled={disabled}>BubbleSort</Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>insertionSort()} disabled={disabled}>InsertionSort</Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>selectionSort()} disabled={disabled}>SelectionSort</Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>mergeSort()} disabled={disabled}>MergeSort</Button>
+            <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>quickSort()} disabled={disabled}>QuickSort</Button>
         <div className="array-container">
             {Array.map((value,index)=>(
                 <div className="array-bar" key={index} style={{backgroundColor: PRIMARY_COLOR,height:`${value}px`}}></div>       
