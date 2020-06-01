@@ -5,26 +5,26 @@ import InsertionSort from '../../SortingAlgorithms/InsertionSort';
 import SelectionSort from '../../SortingAlgorithms/SelectionSort';
 import MergeSort from '../../SortingAlgorithms/MergeSort'
 import QuickSort,{quickSortPartition,doQuickSort} from '../../SortingAlgorithms/QuickSort'
-
 import {Button} from 'antd'; 
 
 const ANIMATION_SPEED_MS = 1;
 
-
-const NUMBER_OF_ARRAY_BARS = 310;
-
 const PRIMARY_COLOR = '#15f4ee';
-
 
 const SECONDARY_COLOR = '#FD1C03';
 
 
 function SortingVisualizer() {
     
+  
+ 
     const [Array, setArray] = useState([]);
     const [disabled ,setdisabled] = useState(false);    
+    
     useEffect(() => {
-        resetArray();
+      
+     
+      resetArray();
     },[]);
     
 
@@ -42,9 +42,10 @@ function SortingVisualizer() {
 
 
     const resetArray = ()=>{
-        let array = [];
-        for(let i=0;i<250;i++){
-            array.push(randomIntFromInterval(5,500));
+      console.log(window.innerWidth,window.innerHeight);
+      let array = [];
+        for(let i=0;i<(window.innerWidth/100)*17;i++){
+            array.push(randomIntFromInterval(5,(window.innerHeight/100)*78));
         }
         setArray(array);
         function makeAllBarsGreen() {
