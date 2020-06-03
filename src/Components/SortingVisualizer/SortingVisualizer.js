@@ -258,7 +258,7 @@ const quickSort=()=>{
 
     return (
       <div style={{marginTop:"23px"}}>
-        <label style={{fontSize:"25px",fontStyle:"bold",marginRight:"100px",fontFamily:"Helvetica Neue"}} htmlFor="reset" disabled={disabled}>SortingAlgorithm</label>
+        <label style={{fontSize:"25px",fontStyle:"bold",marginRight:"100px",fontFamily:"Helvetica Neue"}} htmlFor="reset" disabled={disabled}>SortingAlgorithm's</label>
         <Button name="reset" id="reset" style={{margin:"5px",backgroundColor:`${SECONDARY_COLOR}`,color:"white"}} onClick={()=>resetArray()} disabled={disabled}>Reset </Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>bubbleSort()} disabled={disabled}>BubbleSort</Button>
             <Button style={{margin:"5px",backgroundColor:"#696969",color:"white"}} onClick={()=>insertionSort()} disabled={disabled}>InsertionSort</Button>
